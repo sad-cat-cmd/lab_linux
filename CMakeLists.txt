@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Имя проекта
-project(lab1 LANGUAGES CXX)
+project(lab LANGUAGES CXX)
 
 # 1. Устанавливаем стандарт C++17
 set(CMAKE_CXX_STANDARD 17)
@@ -13,7 +13,7 @@ set(CMAKE_CXX_EXTENSIONS OFF) # Отключаем GNU-расширения дл
 # Добавьте сюда все свои .cpp файлы из папки src
 set(SOURCES
     src/main.cpp
-    src/files.cpp
+    src/processes.cpp
 )
 
 # 4. Создаем исполняемый файл

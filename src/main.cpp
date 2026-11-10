@@ -1,22 +1,35 @@
-#include "files.hpp"
+#include "processes.hpp"
+#include <list>
 
-const std::string & DIR_FOR_SCANNING = std::string("/lib/");
-
-inline void printInfoAboutErr(const std::string & errMsg,
-                              int errCode) 
+inline void printErr(const std::string & msgErr,
+                     int codeErr)
 {
-    std::cout << errMsg << std::endl;
-    std::cout << errCode << std::endl;
+    std::cout << msgErr << "\n" << codeErr << std::endl;
 }
 
 int main() {
-    std::cout << "Current dir: " + DIR_FOR_SCANNING << std::endl;
-    try {
-        files_utils::FilesPrinter::printFilesInDirByUsers(DIR_FOR_SCANNING);
+    std::list<processes::Process *> processes;
+    for (int i = 0; i < 5; i++) {
+        processes::Process * newProcess = new processes::Process();
+        processes.push_back(newProcess);
+        try {
+            newProcess->init();
+        }
+        catch (processes::ExceptionProcess & exc) {
+            printErr(exc.getMsgErr(),
+                     exc.getCodeErr());
+        }
     }
-    catch (files_utils::ExceptionDirOrFilesWork & exc) {
-        printInfoAboutErr(exc.getMsgErr(),
-                          exc.getCodeErr());
+        for (int i = 0; i < 5; i++) {
+        int status = 0;
+        // ждать всех + статус завершения в status + родитель спит
+        pid_t done = waitpid(-1, &status, 0);
+        if (done == -1) {
+            if (errno == ECHILD) {
+                break; 
+            }   // больше нет детей
+            std::cerr << "waitpid: " << strerror(errno) << "\n";
+        }
     }
-    return 1;
+    return 0;
 }
